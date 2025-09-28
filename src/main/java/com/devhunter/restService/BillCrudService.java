@@ -1,7 +1,5 @@
 package com.devhunter.restService;
 
-import java.time.LocalDate;
-
 import org.jboss.resteasy.reactive.RestQuery;
 
 import com.devhunter.model.Bill;
@@ -19,12 +17,13 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 /**
- * This class defines the interfaces, endpoints, and other configurations that the
+ * This class defines the interfaces, endpoints, and other configurations that
+ * the
  * "BillRestServiceProxy" must adhere to.
  */
 @ApplicationScoped
-@Path("/bill")
-public class BillRestService {
+@Path("/crud")
+public class BillCrudService {
 
     @Inject
     BillDatabase database;
@@ -39,8 +38,9 @@ public class BillRestService {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/add")
-    public Response addBill(@RestQuery String companyName, @RestQuery Double amount) {
-        Bill newBill = new Bill(amount, LocalDate.now().toString(), companyName);
+    public Response addBill(@RestQuery String newBillString) {
+        Gson gson = new Gson();
+        Bill newBill = gson.fromJson(newBillString, Bill.class);
         return Response.ok(database.persist(newBill)).build();
     }
 
@@ -115,8 +115,9 @@ public class BillRestService {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/update")
-    public Response updateBill(@RestQuery int id, @RestQuery String companyName, @RestQuery Double amount) {
-        Bill updatedBill = new Bill(amount, LocalDate.now().toString(), companyName);
+    public Response updateBill(@RestQuery int id, @RestQuery String updatedBillString) {
+        Gson gson = new Gson();
+        Bill updatedBill = gson.fromJson(updatedBillString, Bill.class);
         return Response.ok(database.persist(id, updatedBill)).build();
     }
 

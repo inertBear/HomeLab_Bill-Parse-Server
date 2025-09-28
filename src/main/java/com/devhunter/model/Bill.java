@@ -4,14 +4,14 @@ import com.google.gson.Gson;
 
 public class Bill {
 
-    private Double total;
+    private String total;
     private String date;
-    private String companyName;
+    private Company company;
 
-    public Bill(Double total, String date, String companyName) {
+    public Bill(Company company, String total, String date) {
         this.total = total;
         this.date = date;
-        this.companyName = companyName;
+        this.company = company;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class Bill {
         return json;
     }
 
-    public Double getTotal() {
+    public String getTotal() {
         return total;
     }
 
@@ -29,11 +29,11 @@ public class Bill {
         return date;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(String total) {
         this.total = total;
     }
 
@@ -41,8 +41,8 @@ public class Bill {
         this.date = date;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setCompanyName(Company company) {
+        this.company = company;
     }
 
 }

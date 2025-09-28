@@ -16,14 +16,18 @@ import jakarta.ws.rs.core.Response;
 /**
  * I think of this as the ACTUAL RestClient (frontend).
  * 
- * It uses the "BillRestServiceProxy" to communicate with the "BillRestService"
- * (backend).
+ * It uses the "BillCrudServiceProxy" and the "BillParseServiceProxy" to
+ * communicate with the "BillCrudService"
+ * (backend) and the "BillParseService" (backend).
  */
 @ApplicationScoped
 public class BillRestClient {
 
     @RestClient
-    BillRestServiceProxy proxy;
+    BillCrudServiceProxy crudProxy;
+
+    @RestClient
+    BillParseServiceProxy parseProxy;
 
     /**
      * Create
@@ -32,8 +36,8 @@ public class BillRestClient {
      * @param total
      * @return
      */
-    public int addBill(String companyName, Double total) {
-        Response response = proxy.addBill(companyName, total);
+    public int addBill(Bill newBill) {
+        Response response = crudProxy.addBill(newBill);
         Integer newId = response.readEntity(Integer.class);
         return newId;
     }
@@ -44,7 +48,7 @@ public class BillRestClient {
      * @return
      */
     public Map<Integer, Bill> getAllBillsSlowly() {
-        Response allBills = proxy.fetchAllBillsSlowly();
+        Response allBills = crudProxy.fetchAllBillsSlowly();
         String allBillString = allBills.readEntity(String.class);
         return deserializeBillMap(allBillString);
     }
@@ -56,7 +60,7 @@ public class BillRestClient {
      * @return
      */
     public Bill deleteBill(int id) {
-        Response response = proxy.deleteBill(id);
+        Response response = crudProxy.deleteBill(id);
         String deletedBillString = response.readEntity(String.class);
         Gson gson = new Gson();
         Bill deletedBill = gson.fromJson(deletedBillString, Bill.class);
@@ -71,5 +75,19 @@ public class BillRestClient {
         Type mapType = new TypeToken<Map<Integer, Bill>>() {
         }.getType();
         return specialGson.fromJson(billsString, mapType);
+    }
+
+    /**
+     * parse a bill
+     * 
+     * @param billText
+     * @return
+     */
+    public Bill parseBill(String billText) {
+        Response response = parseProxy.parseBill(billText);
+        String parsedBillString = response.readEntity(String.class);
+        Gson gson = new Gson();
+        Bill parsedBill = gson.fromJson(parsedBillString, Bill.class);
+        return parsedBill;
     }
 }

@@ -1,6 +1,6 @@
-# quarkus-rest-tester
+# bill-parser
 
-This was built as an example of quarkus-rest implementation. It is intended to be used as an integration into Home Assistant.
+This microservice parses bills recieved via a rest call. It is intended to be used as an integration into Home Assistant.
 
 - "dev mode" command:
     - mvn quarkus:dev
@@ -9,4 +9,4 @@ This was built as an example of quarkus-rest implementation. It is intended to b
     - http://localhost:8080/q/swagger-ui
 
 - docker build command:
-    - docker buildx build -t quarkus-rest-tester -f src/main/docker/Dockerfile.native .
+    - docker buildx build -t bill-parser -f src/main/docker/Dockerfile.native .

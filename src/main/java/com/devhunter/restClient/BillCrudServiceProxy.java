@@ -3,6 +3,8 @@ package com.devhunter.restClient;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.reactive.RestQuery;
 
+import com.devhunter.model.Bill;
+
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -19,13 +21,13 @@ import jakarta.ws.rs.core.Response;
  * with the "BillRestService" (backend).
  */
 @Path("/bill")
-@RegisterRestClient(configKey = "bill-rest-service-proxy")
-public interface BillRestServiceProxy {
+@RegisterRestClient(configKey = "bill-crud-service-proxy")
+public interface BillCrudServiceProxy {
 
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/add")
-    Response addBill(@RestQuery String companyName, @RestQuery Double amount);
+    Response addBill(@RestQuery Bill newBill);
 
     @GET
     @Path("/fetch")
@@ -50,7 +52,7 @@ public interface BillRestServiceProxy {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/update")
-    public Response updateBill(@RestQuery int id, @RestQuery String companyName, @RestQuery Double amount);
+    public Response updateBill(@RestQuery int id, @RestQuery Bill updatedBill);
 
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
