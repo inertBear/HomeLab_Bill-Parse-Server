@@ -17,8 +17,8 @@ import jakarta.ws.rs.core.Response;
  * I think of this as the ACTUAL RestClient (frontend).
  * 
  * It uses the "BillCrudServiceProxy" and the "BillParseServiceProxy" to
- * communicate with the "BillCrudService"
- * (backend) and the "BillParseService" (backend).
+ * communicate with the "BillCrudService" (backend) and the "BillParseService"
+ * (backend).
  */
 @ApplicationScoped
 public class BillRestClient {
@@ -83,11 +83,9 @@ public class BillRestClient {
      * @param billText
      * @return
      */
-    public Bill parseBill(String billText) {
+    public String parseBill(String billText) {
         Response response = parseProxy.parseBill(billText);
         String parsedBillString = response.readEntity(String.class);
-        Gson gson = new Gson();
-        Bill parsedBill = gson.fromJson(parsedBillString, Bill.class);
-        return parsedBill;
+        return parsedBillString;
     }
 }

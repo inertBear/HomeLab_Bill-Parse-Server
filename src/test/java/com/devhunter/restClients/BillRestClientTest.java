@@ -12,13 +12,15 @@ import org.junit.jupiter.api.Test;
 import com.devhunter.model.Bill;
 import com.devhunter.model.Company;
 import com.devhunter.restClient.BillRestClient;
+import com.google.gson.Gson;
 
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 
 /**
- * Tests the BillRestClient's use of the "BillRestServiceProxy" against the
- * "BillRestService"
+ * Tests the BillClients use of the "BillCrudServiceProxy" against the
+ * "BillCrudService" and the "BillParseServiceProxy" against the
+ * "BillParseService"
  */
 @QuarkusTest
 class BillRestClientTest {
@@ -68,5 +70,23 @@ class BillRestClientTest {
         Map<Integer, Bill> secondAllBills = client.getAllBillsSlowly();
         // Assert: Verify there are no itemsKs
         assertEquals(0, secondAllBills.size());
+    }
+
+    @Test
+    @Disabled("Disabled for Docker build only")
+    @DisplayName("Proxy: Parse a test bill")
+    public void testParse() {
+        // Arrange: create & add a bill from rest client
+        String billString = "asdkfjakdsjfkjskdfkjFrontierasdkfj 23o478098uokasdfl n $75.64adsfkj asdfi238iIJNIJIJ";
+
+        // Act: parse bill text
+        String parsedBillString = client.parseBill(billString);
+        Gson gson = new Gson();
+        Bill parsedBill = gson.fromJson(parsedBillString, Bill.class);
+
+        // Assert: verify bill data
+        assertEquals("Frontier", parsedBill.getCompany().getName());
+        assertEquals("Internet", parsedBill.getCompany().getService());
+        assertEquals("$75.64", parsedBill.getTotal());
     }
 }
